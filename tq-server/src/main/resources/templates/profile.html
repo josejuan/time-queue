@@ -1,0 +1,8 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<div class="container" layout:fragment="content">
+    <p th:text="'Hello, ' + ${user.email} + '!'" />
+</div>
+</body>
+</html>

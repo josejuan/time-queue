@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Events</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${events.empty}">
+            <td colspan="2">No events</td>
+        </tr>
+        <tr th:each="event : ${events}">
+            <td><span th:text="${event.title}"> Title </span></td>
+            <td><a th:text="edit" th:href="'/p/event/' + ${event.id}"></a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

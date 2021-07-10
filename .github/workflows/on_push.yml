@@ -30,8 +30,8 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: geodesicsoflearning
-          password: ${{ secrets.GIT_AUTH_TOKEN }}
+          username: ${{ secrets.DOCKER_HUB_USR }}
+          password: ${{ secrets.DOCKER_HUB_PWD }}
       - name: Extract branch name
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"

@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{fragments/layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<div class="container" layout:fragment="content">
+    <h1>Edit Event</h1>
+    <form th:action="@{/p/event}" th:object="${event}" method="post">
+        <p>Id: <input type="text" th:field="*{id}" readonly="readonly" /></p>
+        <p>Title: <input type="text" th:field="*{title}" /></p>
+        <p>Description: <input type="text" th:field="*{description}" /></p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+</div>
+</body>
+</html>

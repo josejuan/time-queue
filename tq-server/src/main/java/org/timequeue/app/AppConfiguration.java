@@ -22,6 +22,12 @@ public class AppConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.antMatcher("/p/**").authorizeRequests().anyRequest().authenticated().and().httpBasic();
+        http
+                .httpBasic()
+
+                .and().authorizeRequests().anyRequest().authenticated()
+
+                // we use basic auth over https, no csrf attack is possible
+                .and().csrf().disable();
     }
 }

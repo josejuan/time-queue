@@ -1,0 +1,52 @@
+<!doctype html>
+<html th:attr="lang=en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Super Simple Time Queue!</title>
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/fontawesome.css" rel="stylesheet">
+    <link href="/static/css/site.css" rel="stylesheet">
+
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/ejs.js"></script>
+    <script src="/static/js/app.js"></script>
+</head>
+<body>
+<header class="container" style="position: relative">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/p/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/p/events">Queue</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/p/event">New</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/p/changepassword">Password</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div th:if="${messages != null}">
+        <ul>
+            <li th:class="'msg_' + ${i.level}" th:each="i : *{messages}" th:text="${i.text}"></li>
+        </ul>
+    </div>
+</div>
+<div layout:fragment="content"></div>
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

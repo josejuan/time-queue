@@ -1,8 +1,6 @@
 package org.timequeue.controller;
 
-import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,59 +8,31 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.timequeue.auth.PBKDF2;
-import org.timequeue.data.model.User;
 import org.timequeue.data.repo.Users;
 import org.timequeue.pojo.ChangePassword;
-import org.timequeue.pojo.Msg;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
-import java.util.List;
+
+import static org.timequeue.controller.ControllerUtil.error;
+import static org.timequeue.controller.ControllerUtil.getUser;
+import static org.timequeue.controller.ControllerUtil.info;
 
 @Controller
-@RequestMapping("/p")
-public class UserProfileController {
+@RequestMapping("/p/changepassword")
+public class ChangePasswordController {
 
     @Autowired
     private Users users;
 
-    private static List<Msg> msg(Model model) {
-        if (!model.containsAttribute("messages"))
-            model.addAttribute("messages", new ArrayList<Msg>());
-        return (List<Msg>) model.getAttribute("messages");
-    }
-
-    private static void msg(Model model, Level level, String format, Object... args) {
-        msg(model).add(new Msg(level, String.format(format, args)));
-    }
-
-    private static void error(Model model, String format, Object... args) {
-        msg(model).add(new Msg(Level.ERROR, String.format(format, args)));
-    }
-
-    private static void warn(Model model, String format, Object... args) {
-        msg(model).add(new Msg(Level.WARN, String.format(format, args)));
-
-    }
-
-    private static void info(Model model, String format, Object... args) {
-        msg(model).add(new Msg(Level.INFO, String.format(format, args)));
-    }
-
-    private User getUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-    @GetMapping("/")
-    public String main(Model model) {
-        model.addAttribute("user", getUser());
+    @GetMapping
+    public String get(Model model) {
         model.addAttribute("changePassword", new ChangePassword());
-        return "userprofile";
+        return "changepassword";
     }
 
-    @PostMapping("/changepassword")
-    public String changepassword(@ModelAttribute ChangePassword changePassword, Model model) {
+    @PostMapping
+    public String post(@ModelAttribute ChangePassword changePassword, Model model) {
         if (changePassword.getNew1() == null || changePassword.getNew1().trim().length() < 1)
             error(model, "new password cannot be empty!");
         else if (!changePassword.getNew1().equals(changePassword.getNew2()))
@@ -78,7 +48,7 @@ public class UserProfileController {
                 error(model, e.getLocalizedMessage());
             }
         }
-        return main(model);
+        return get(model);
     }
 
 }

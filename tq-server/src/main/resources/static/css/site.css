@@ -1,0 +1,12 @@
+.msg_ERROR {
+    color: red;
+    font-weight: bold;
+}
+.msg_WARN {
+    color: orange;
+    font-weight: bold;
+}
+.msg_INFO {
+    color: green;
+    font-weight: bold;
+}

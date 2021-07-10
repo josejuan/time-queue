@@ -33,4 +33,6 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = false;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<Event> events = new HashSet<>();
 }
