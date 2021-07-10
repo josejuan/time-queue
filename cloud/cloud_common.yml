@@ -20,11 +20,11 @@ spec:
       image: geodesicsoflearning/tq:server-BRANCH_ORG_NAME
       imagePullPolicy: Always
       env:
-        - name: TQ_ENV
+        - name: TIMEQ_ENV
           value: "BRANCH_ORG_NAME"
-        - name: TQ_DB_DEV_USR
+        - name: TIMEQ_DB_DEV_USR
           value: "DEV_DATABASE_USR"
-        - name: TQ_DB_DEV_PWD
+        - name: TIMEQ_DB_DEV_PWD
           value: "DEV_DATABASE_PWD"
       ports:
         - containerPort: 8080
