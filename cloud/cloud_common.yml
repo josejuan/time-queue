@@ -68,9 +68,20 @@ metadata:
 spec:
   tls:
     - hosts:
-        - BRANCH_ORG_NAME.tq.WWW_ORG_NAME
+        - BRANCH_ORG_NAME-tq.WWW_ORG_NAME
   defaultBackend:
     service:
       name: tqserver
       port:
         number: 8080
+  rules:
+    - host: BRANCH_ORG_NAME-tq.wikicurriculum.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tqserver
+                port:
+                  number: 8080
