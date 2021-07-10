@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.timequeue.auth.PBKDF2;
 import org.timequeue.data.model.User;
 import org.timequeue.data.repo.Users;
@@ -20,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class MainController {
+@RequestMapping("/p")
+public class UserProfileController {
 
     @Autowired
     private Users users;
@@ -56,7 +58,7 @@ public class MainController {
     public String main(Model model) {
         model.addAttribute("user", getUser());
         model.addAttribute("changePassword", new ChangePassword());
-        return "main";
+        return "userprofile";
     }
 
     @PostMapping("/changepassword")
