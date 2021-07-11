@@ -25,7 +25,7 @@ public class AppConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic()
 
-                .and().authorizeRequests().anyRequest().authenticated()
+                .and().antMatcher("/p/**").authorizeRequests().anyRequest().authenticated()
 
                 // we use basic auth over https, no csrf attack is possible
                 .and().csrf().disable();
