@@ -3,12 +3,79 @@
 <body>
 <div class="container" layout:fragment="content">
     <h1>Edit Event</h1>
-    <form th:action="@{/p/event}" th:object="${event}" method="post">
-        <p>Id: <input type="text" th:field="*{id}" readonly="readonly" /></p>
-        <p>Title: <input type="text" th:field="*{title}" /></p>
-        <p>Description: <input type="text" th:field="*{description}" /></p>
-        <p><input type="submit" value="Submit" /></p>
+    <form th:action="@{/p/event}" th:object="${form}" method="post">
+        <p>Id: <input type="text" th:field="*{event.id}" readonly="readonly" /></p>
+        <p>Title: <input type="text" th:field="*{event.title}" /></p>
+        <p>Description: <input type="text" th:field="*{event.description}" /></p>
+        <p>Event date: <input type="datetime-local" name="datetime" th:field="*{event.nextEvent}" /></p>
+        <p>Last notification: <span th:text="*{event.lastNotification}"></span></p>
+        <p>Notify: <select class="add_notification">
+            <option value="">(add notification)</option>
+            <option value="1m">1 minute before</option>
+            <option value="5m">5 minutes before</option>
+            <option value="15m">15 minutes before</option>
+            <option value="30m">30 minutes before</option>
+            <option value="1h">1 hour before</option>
+            <option value="2h">2 hours before</option>
+            <option value="5h">5 hours before</option>
+            <option value="12h">12 hours before</option>
+            <option value="1d">1 day before</option>
+            <option value="2d">2 days before</option>
+            <option value="3d">3 days before</option>
+            <option value="4d">4 days before</option>
+            <option value="5d">5 days before</option>
+            <option value="6d">6 days before</option>
+            <option value="1w">1 week before</option>
+            <option value="2w">2 weeks before</option>
+            <option value="3w">3 weeks before</option>
+            <option value="4w">4 weeks before</option>
+        </select></p>
+        <ul class="notifications">
+            <li th:each="n, s : *{notifications}" th:attr="data-index=${s.index}">
+                <input type="hidden" th:field="*{notifications[__${s.index}__].key}" />
+                <input type="hidden" th:field="*{notifications[__${s.index}__].text}" />
+                <span th:text="${n.text}"></span>
+                <a class="deleteNotification">remove</a>
+            </li>
+        </ul>
+        <p>Update mode: <select th:field="*{event.updateMode}">
+            <option th:each="i : ${updateModes}" th:value="${i}" th:text="${i}">
+        </select></p>
+        <p class="saving" style="display: none">Saving changes...</p>
+        <p><input class="save_button" type="submit" name="save" value="Save" />
+            &nbsp;
+            <input class="cancel_button" type="submit" name="cancel" value="Cancel" />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input class="delete_button" type="submit" name="delete" value="Delete" /></p>
     </form>
+    <script>
+        function removeNotification(e) {
+            $(e.target).closest('li').remove();
+        }
+        $(function () {
+            $('.save_button').click(() => $('.saving').show());
+            $('.deleteNotification').click(removeNotification);
+            $('.add_notification').change(function () {
+                if($('.add_notification').val() != "") {
+                    const index = 1 + $('.notifications > li').map((i, e) => $(e).data('index')).get().reduce((a, b) => a > b ? a : b, 0);
+                    const id = 'notifications' + index;
+                    const li = $(
+                        '<li data-index="' + index + '">' +
+                            '<input type="hidden" id="' + id + '.key" name="notifications[' + index + '].key">' +
+                            '<input type="hidden" id="' + id + '.text" name="notifications[' + index + '].text">' +
+                        '</li>');
+                    const text = $('.add_notification option:selected').text();
+                    $('.notifications').append(li);
+                    document.getElementById(id + '.key').value = $('.add_notification').val();
+                    document.getElementById(id + '.text').value = text;
+                    li.append($('<span/>').text(text));
+                    const remove = $('<a class="deleteNotification">remove</a>').click(removeNotification);
+                    li.append(remove);
+                    $('.add_notification').val("");
+                }
+            });
+        });
+    </script>
 </div>
 </body>
 </html>

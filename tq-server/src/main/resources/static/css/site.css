@@ -10,3 +10,14 @@
     color: green;
     font-weight: bold;
 }
+.deleteNotification {
+    cursor: pointer;
+}
+.saving {
+    font-weight: bolder;
+    color: olive;
+}
+.delete_button {
+    background-color: red;
+    color: white;
+}
