@@ -17,7 +17,21 @@
     font-weight: bolder;
     color: olive;
 }
+.notifying {
+    font-weight: bolder;
+    color: orange;
+}
 .delete_button {
     background-color: red;
     color: white;
 }
+.eventList th {
+    padding: 0.5em;
+    border-left: 1px solid gray;
+    border-bottom: 3px solid black;
+}
+.eventList td {
+     padding: 0.5em;
+     border-left: 1px solid gray;
+     border-bottom: 1px solid black;
+ }

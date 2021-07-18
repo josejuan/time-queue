@@ -8,7 +8,7 @@
         <p>Title: <input type="text" th:field="*{event.title}" /></p>
         <p>Description: <input type="text" th:field="*{event.description}" /></p>
         <p>Event date: <input type="datetime-local" name="datetime" th:field="*{event.nextEvent}" /></p>
-        <p>Last notification: <span th:text="*{event.lastNotification}"></span></p>
+        <p>Last notification: <span th:text="*{lastNotification}"></span></p>
         <p>Notify: <select class="add_notification">
             <option value="">(add notification)</option>
             <option value="1m">1 minute before</option>
@@ -45,9 +45,12 @@
             <option th:each="i : ${updateModes}" th:value="${i}" th:text="${i}">
         </select></p>
         <p class="saving" style="display: none">Saving changes...</p>
+        <p class="notifying" style="display: none">Sending notification...</p>
         <p><input class="save_button" type="submit" name="save" value="Save" />
             &nbsp;
             <input class="cancel_button" type="submit" name="cancel" value="Cancel" />
+            &nbsp;
+            <input class="test_button" type="submit" name="test" value="Test" />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input class="delete_button" type="submit" name="delete" value="Delete" /></p>
     </form>
@@ -57,6 +60,7 @@
         }
         $(function () {
             $('.save_button').click(() => $('.saving').show());
+            $('.test_button').click(() => $('.notifying').show());
             $('.deleteNotification').click(removeNotification);
             $('.add_notification').change(function () {
                 if($('.add_notification').val() != "") {

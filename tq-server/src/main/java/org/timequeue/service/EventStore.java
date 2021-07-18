@@ -18,6 +18,12 @@ public class EventStore {
     @Autowired
     private Events events;
 
+    public static LocalDateTime utcToUserLocalDateTime(LocalDateTime utc) {
+        if (utc == null)
+            return null;
+        return utc.atZone(ZoneOffset.UTC).toOffsetDateTime().atZoneSameInstant(USER_ZONE_ID).toLocalDateTime();
+    }
+
     public void save(Event e) {
 
         // compute the next notification

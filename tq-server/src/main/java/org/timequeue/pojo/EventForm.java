@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.timequeue.data.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -13,4 +14,5 @@ import java.util.List;
 public class EventForm {
     private Event event;
     private List<Notification> notifications;
+    private LocalDateTime lastNotification;
 }

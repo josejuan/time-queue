@@ -4,19 +4,25 @@
 <body>
 <div class="container" layout:fragment="content">
     <h1>Events</h1>
-    <table>
+    <table class="eventList">
         <thead>
         <tr>
             <th>Title</th>
+            <th>Event date</th>
+            <th>Next notification</th>
+            <th>Last notification</th>
             <th>&nbsp;</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${events.empty}">
-            <td colspan="2">No events</td>
+            <td colspan="4">No events</td>
         </tr>
         <tr th:each="event : ${events}">
-            <td><span th:text="${event.title}"> Title </span></td>
+            <td><span th:text="${event.title}"></span></td>
+            <td><span th:text="${event.nextEvent}"></span></td>
+            <td><span th:text="${T(org.timequeue.service.EventStore).utcToUserLocalDateTime(event.nextNotification)}"></span></td>
+            <td><span th:text="${T(org.timequeue.service.EventStore).utcToUserLocalDateTime(event.lastNotification)}"></span></td>
             <td><a th:text="edit" th:href="'/p/event/' + ${event.id}"></a></td>
         </tr>
         </tbody>

@@ -13,11 +13,13 @@ import org.timequeue.data.model.UpdateMode;
 import org.timequeue.data.repo.Events;
 import org.timequeue.pojo.EventForm;
 import org.timequeue.pojo.Notification;
+import org.timequeue.service.EventNotifier;
 import org.timequeue.service.EventStore;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Collections.emptyList;
@@ -25,6 +27,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.timequeue.controller.ControllerUtil.getUser;
+import static org.timequeue.service.EventStore.utcToUserLocalDateTime;
 
 @Controller
 @RequestMapping("/p/event")
@@ -36,17 +39,30 @@ public class EventController {
     @Autowired
     private EventStore eventStore;
 
+    @Autowired
+    private EventNotifier eventNotifier;
+
+    private Optional<Event> getUserEvent(UUID eventId) {
+        return events
+                .findById(eventId)
+                .filter(e -> e.getUser().getEmail().equals(getUser().getEmail()));
+    }
+
     @GetMapping({"", "/", "/{id}"})
     public String get(@PathVariable(name = "id", required = false) UUID _id, Model model) {
         final UUID id = _id == null ? UUID.randomUUID() : _id;
 
-        final Event event = getUser().getEvents().stream().filter(x -> id.equals(x.getId())).findAny().orElseGet(() -> makeEvent(id));
+        final Event event = getUserEvent(id).orElseGet(() -> makeEvent(id));
         // some datetime-local input controls require do not set seconds nor milis
         event.setNextEvent(event.getNextEvent().truncatedTo(ChronoUnit.MINUTES));
 
         final List<Notification> notifications = event.getMinutesAfterNotifications().stream().map(Notification::from).collect(toList());
 
-        final EventForm form = new EventForm(event, notifications);
+        final EventForm form = new EventForm(
+                event,
+                notifications,
+                utcToUserLocalDateTime(event.getLastNotification())
+        );
 
         model.addAttribute("form", form);
         model.addAttribute("updateModes", UpdateMode.values());
@@ -77,9 +93,17 @@ public class EventController {
         return "redirect:/p/event/" + form.getEvent().getId().toString();
     }
 
+    @PostMapping(value = {"", "/"}, params = "test")
+    public String postTest(@ModelAttribute EventForm form, Model model) {
+        getUserEvent(form.getEvent().getId()).ifPresent(e -> {
+            eventNotifier.notifyEvent(e);
+        });
+        return "redirect:/p/event/" + form.getEvent().getId().toString();
+    }
+
     @PostMapping(value = {"", "/"}, params = "delete")
     public String postDelete(@ModelAttribute EventForm form, Model model) {
-        events.findById(form.getEvent().getId()).ifPresent(e -> {
+        getUserEvent(form.getEvent().getId()).ifPresent(e -> {
             e.getUser().getEvents().remove(e);
             events.delete(e);
         });
