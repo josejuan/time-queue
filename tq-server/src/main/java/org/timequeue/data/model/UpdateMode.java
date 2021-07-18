@@ -6,6 +6,15 @@ public enum UpdateMode {
     // Do nothing.
     NEVER,
 
-    // Event.nextEvent.Year += 1
+    // Event.nextEvent.Day += 1
+    DAILY,
+
+    // Event.nextEvent.Day += 7
+    WEEK,
+
+    // Event.nextEvent.Month += 1   (truncated to the max month day if required)
+    MONTH,
+
+    // Event.nextEvent.Year += 1   (truncated to the max month day if required)
     ANNUALLY
 }

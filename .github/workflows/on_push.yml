@@ -64,6 +64,10 @@ jobs:
         run: |
           ssh cloud '! microk8s kubectl describe namespace tq-${{ steps.ebranch.outputs.branch }} || microk8s kubectl delete namespace tq-${{ steps.ebranch.outputs.branch }}'
           cat cloud/cloud_common.yml cloud/${GITHUB_REF##*/}_cloud.yml | \
+            sed 's/"TIMEQ_MAIL_FROM"/"${{ secrets.TIMEQ_MAIL_FROM }}"/g' | \
+            sed 's/"TIMEQ_MAIL_HOST"/"${{ secrets.TIMEQ_MAIL_HOST }}"/g' | \
+            sed 's/"TIMEQ_MAIL_PASS"/"${{ secrets.TIMEQ_MAIL_PASS }}"/g' | \
+            sed 's/"TIMEQ_MAIL_USER"/"${{ secrets.TIMEQ_MAIL_USER }}"/g' | \
             sed 's/DEV_DATABASE_USR/${{ secrets.DEV_DATABASE_USR }}/g' | \
             sed 's/DEV_DATABASE_PWD/${{ secrets.DEV_DATABASE_PWD }}/g' | \
             sed 's/BRANCH_ORG_NAME/${{ steps.ebranch.outputs.branch }}/g' | \

@@ -13,8 +13,8 @@ import org.timequeue.data.model.UpdateMode;
 import org.timequeue.data.repo.Events;
 import org.timequeue.pojo.EventForm;
 import org.timequeue.pojo.Notification;
+import org.timequeue.service.EventStore;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -34,7 +34,7 @@ public class EventController {
     private Events events;
 
     @Autowired
-    private EntityManager entityManager;
+    private EventStore eventStore;
 
     @GetMapping({"", "/", "/{id}"})
     public String get(@PathVariable(name = "id", required = false) UUID _id, Model model) {
@@ -56,9 +56,10 @@ public class EventController {
 
     @PostMapping(value = {"", "/"}, params = "save")
     public String postSave(@ModelAttribute EventForm form, Model model) {
+        final Event e = form.getEvent();
 
-        form.getEvent().setUser(getUser());
-        form.getEvent().setMinutesAfterNotifications(
+        e.setUser(getUser());
+        e.setMinutesAfterNotifications(
                 ofNullable(form.getNotifications())
                         .orElse(emptyList())
                         .stream()
@@ -66,9 +67,9 @@ public class EventController {
                         .map(Notification::getMinutes)
                         .collect(toSet()));
 
-        events.save(form.getEvent());
+        eventStore.save(e);
 
-        return "redirect:/p/event/" + form.getEvent().getId().toString();
+        return "redirect:/p/event/" + e.getId().toString();
     }
 
     @PostMapping(value = {"", "/"}, params = "cancel")
@@ -92,7 +93,6 @@ public class EventController {
         e.setDescription(null);
         e.setNextEvent(LocalDateTime.now());
         e.setLastNotification(null);
-//        e.setMinutesAfterNotifications(emptySet());
         e.setUpdateMode(UpdateMode.NEVER);
         return e;
     }

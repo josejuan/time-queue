@@ -26,6 +26,14 @@ spec:
           value: "DEV_DATABASE_USR"
         - name: TIMEQ_DB_DEV_PWD
           value: "DEV_DATABASE_PWD"
+        - name: TIMEQ_MAIL_FROM
+          value: "TIMEQ_MAIL_FROM"
+        - name: TIMEQ_MAIL_HOST
+          value: "TIMEQ_MAIL_HOST"
+        - name: TIMEQ_MAIL_PASS
+          value: "TIMEQ_MAIL_PASS"
+        - name: TIMEQ_MAIL_USER
+          value: "TIMEQ_MAIL_USER"
       ports:
         - containerPort: 8080
       readinessProbe:

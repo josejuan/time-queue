@@ -50,17 +50,23 @@ public class Event {
     private String description;
 
     /**
-     * Is the date of the event.
+     * Is the date of the event (in the user local time zone)
      */
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime nextEvent;
 
     /**
-     * Last notification sent for this event.
+     * Next notification (utc)
      */
     @Column
-    private OffsetDateTime lastNotification;
+    private LocalDateTime nextNotification;
+
+    /**
+     * Last notification sent for this event (utc)
+     */
+    @Column
+    private LocalDateTime lastNotification;
 
     /**
      * (Ordered) minutes after event where notifications will be send.
