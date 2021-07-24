@@ -18,7 +18,7 @@ public class NotificationTask {
     @Autowired
     private EventNotifier eventNotifier;
 
-    @Scheduled(initialDelay = 1_000, fixedRate = 5_000)
+    @Scheduled(initialDelay = 30_000, fixedRate = 30_000)
     public void notifyPendingEvents() {
         events.findPendingNotifications(LocalDateTime.now(ZoneOffset.UTC)).forEach(eventNotifier::notifyEvent);
     }
