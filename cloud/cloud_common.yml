@@ -34,6 +34,10 @@ spec:
           value: "TIMEQ_MAIL_PASS"
         - name: TIMEQ_MAIL_USER
           value: "TIMEQ_MAIL_USER"
+        - name: TIMEQ_MAIL_SUBJECT
+          value: "TIMEQ_MAIL_SUBJECT"
+        - name: TIMEQ_DEPLOYMENT
+          value: "TIMEQ_DEPLOYMENT"
       ports:
         - containerPort: 8080
       readinessProbe:

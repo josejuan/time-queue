@@ -21,6 +21,12 @@ public class EventNotifier {
     @Autowired
     private EventStore eventStore;
 
+    @Value("${timeq.deployment}")
+    private String deployment;
+
+    @Value("${timeq.mail.subject}")
+    private String fromSubject;
+
     @Value("${timeq.mail.from}")
     private String fromMail;
 
@@ -29,8 +35,8 @@ public class EventNotifier {
         final SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(event.getUser().getEmail());
         msg.setFrom(fromMail);
-        msg.setSubject("Time Queue! " + event.getTitle());
-        msg.setText("Time Queue remember you:\n\n" + event.getDescription());
+        msg.setSubject(fromSubject + event.getTitle());
+        msg.setText(formatBody(event));
         mailSender.send(msg);
         System.out.printf("Sent mail to %s%n", event.getUser().getEmail());
 
@@ -55,5 +61,14 @@ public class EventNotifier {
             }
             eventStore.save(event);
         }
+    }
+
+    private String formatBody(Event event) {
+        return "" +
+                event.getTitle() + "\n" +
+                "\n" +
+                event.getDescription() + "\n" +
+                "\n" +
+                "https://" + deployment + "-tq.wikicurriculum.org/p/event/" + event.getId().toString();
     }
 }
