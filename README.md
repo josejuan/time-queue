@@ -67,3 +67,4 @@ $ git checkout branch
 $ git merge whatever-branch-to-take-changes
 $ git push
 ```
+
