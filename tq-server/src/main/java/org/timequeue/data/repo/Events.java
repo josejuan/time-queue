@@ -12,7 +12,5 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface Events extends CrudRepository<Event, UUID> {
-    @Query("select e from Event e where e.nextNotification < :now")
-    List<Event> findPendingNotifications(@Param("now") LocalDateTime now);
+public interface Events extends CrudRepository<Event, String> {
 }

@@ -8,6 +8,7 @@ import org.timequeue.service.EventNotifier;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.stream.StreamSupport;
 
 @Component
 public class NotificationTask {
@@ -20,7 +21,11 @@ public class NotificationTask {
 
     @Scheduled(initialDelay = 30_000, fixedRate = 30_000)
     public void notifyPendingEvents() {
-        events.findPendingNotifications(LocalDateTime.now(ZoneOffset.UTC)).forEach(eventNotifier::notifyEvent);
+        final LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+        StreamSupport
+                .stream(events.findAll().spliterator(), false)
+                .filter(e -> e.getNextNotification() != null && e.getNextNotification().isBefore(now))
+                .forEach(eventNotifier::notifyEvent);
     }
 
 }

@@ -42,15 +42,15 @@ public class EventController {
     @Autowired
     private EventNotifier eventNotifier;
 
-    private Optional<Event> getUserEvent(UUID eventId) {
+    private Optional<Event> getUserEvent(String eventId) {
         return events
                 .findById(eventId)
                 .filter(e -> e.getUser().getEmail().equals(getUser().getEmail()));
     }
 
     @GetMapping({"", "/", "/{id}"})
-    public String get(@PathVariable(name = "id", required = false) UUID _id, Model model) {
-        final UUID id = _id == null ? UUID.randomUUID() : _id;
+    public String get(@PathVariable(name = "id", required = false) String _id, Model model) {
+        final String id = _id == null ? UUID.randomUUID().toString() : _id;
 
         final Event event = getUserEvent(id).orElseGet(() -> makeEvent(id));
         // some datetime-local input controls require do not set seconds nor milis
@@ -110,7 +110,7 @@ public class EventController {
         return "redirect:/p/events";
     }
 
-    private Event makeEvent(UUID id) {
+    private Event makeEvent(String id) {
         final Event e = new Event();
         e.setId(id);
         e.setTitle(null);
